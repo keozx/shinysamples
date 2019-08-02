@@ -55,16 +55,25 @@ namespace Samples.Jobs
             this.RunAsTask = ReactiveCommand.Create(
                 () => this.jobManager.RunTask(this.JobName + "Task", async _ =>
                 {
-                    this.dialogs.Toast("Task Started");
-                    for (var i = 0; i < this.JobLoopCount; i++)
+                    try
                     {
-                        await Task.Delay(1000).ConfigureAwait(false);
+                        await navigator.GoBack();
+                        this.dialogs.Toast("Task Started");
+                        for (var i = 0; i < this.JobLoopCount; i++)
+                        {
+                            await Task.Delay(1000).ConfigureAwait(false);
+                        }
+                        throw new Exception("MIND BLOWING!!!");
+                        this.dialogs.Toast("Task Finished");
                     }
-                    this.dialogs.Toast("Task Finished");
+                    catch (Exception ex)
+                    {
+                        await dialogs.Alert(ex.Message);
+                    }
                 }),
                 valObs
             );
-
+            
             this.ChangeRequiredInternetAccess = ReactiveCommand.Create(() =>
             {
                 //var cfg = new ActionSheetConfig()

@@ -4,6 +4,9 @@ using Android.App;
 using Android.Runtime;
 using Samples.ShinySetup;
 using Shiny.Jobs;
+using Samples.Jobs;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Samples.Droid
 {
@@ -32,6 +35,7 @@ namespace Samples.Droid
                 {
                     // TODO: make android great again - by running jobs faster for debugging purposes ;)
                     services.ConfigureJobService(TimeSpan.FromMinutes(1));
+                    services.AddSingleton<IJobManager, MyJobManager>();
                 }
 #endif
             );
