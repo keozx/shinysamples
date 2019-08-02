@@ -16,12 +16,12 @@ namespace Samples.Jobs
 {
     public class LogViewModel : AbstractLogViewModel<CommandItem>
     {
-        readonly IJobManager jobManager;
+        readonly IMyJobManager jobManager;
         readonly SampleSqliteConnection conn;
         readonly ISerializer serializer;
 
 
-        public LogViewModel(IJobManager jobManager,
+        public LogViewModel(IMyJobManager jobManager,
                             IUserDialogs dialogs,
                             ISerializer serializer,
                             SampleSqliteConnection conn) : base(dialogs)
@@ -37,6 +37,8 @@ namespace Samples.Jobs
             base.Initialize(parameters);
             this.jobManager.JobStarted += this.OnJobStarted;
             this.jobManager.JobFinished += this.OnJobFinished;
+            this.jobManager.TaskStarted += this.OnJobStarted;
+            this.jobManager.TaskFinished += this.OnJobFinished;
         }
 
 
@@ -45,6 +47,8 @@ namespace Samples.Jobs
             base.Destroy();
             this.jobManager.JobStarted -= this.OnJobStarted;
             this.jobManager.JobFinished -= this.OnJobFinished;
+            this.jobManager.TaskStarted -= this.OnJobStarted;
+            this.jobManager.TaskFinished -= this.OnJobFinished;
         }
 
 

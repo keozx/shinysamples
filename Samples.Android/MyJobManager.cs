@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Samples.Jobs
 {
-    public class MyJobManager : AbstractJobManager
+    public class MyJobManager : AbstractJobManager, IMyJobManager
     {
         readonly AndroidContext context;
 
@@ -28,21 +28,24 @@ namespace Samples.Jobs
             try
             {
                 this.LogTask(JobState.Start, taskName);
-                RaiseJobStarted(jobInfo);
+                TaskStarted?.Invoke(this, jobInfo);
 
                 await task(CancellationToken.None).ConfigureAwait(false);
 
-                RaiseJobFinished(new JobRunResult(true, jobInfo, null));
+                TaskFinished?.Invoke(this, new JobRunResult(true, jobInfo, null));
                 this.LogTask(JobState.Finish, taskName);
             }
             catch (Exception ex)
             {
                 this.LogTask(JobState.Error, taskName, ex);
-                RaiseJobFinished(new JobRunResult(false, jobInfo, ex));
+                TaskFinished?.Invoke(this, new JobRunResult(false, jobInfo, ex));
                 throw;
             }
         }
-    
+
+        public event EventHandler<JobInfo> TaskStarted;
+        public event EventHandler<JobRunResult> TaskFinished;
+
         public override Task<AccessState> RequestAccess()
         {
             var permission = AccessState.Available;
