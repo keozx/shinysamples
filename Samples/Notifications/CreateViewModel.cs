@@ -5,13 +5,14 @@ using Acr.UserDialogs.Forms;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Shiny.Notifications;
+using Shiny;
 
 
 namespace Samples.Notifications
 {
-    public class SetupViewModel : ViewModel
+    public class CreateViewModel : ViewModel
     {
-        public SetupViewModel(INotificationManager notificationManager, IUserDialogs dialogs)
+        public CreateViewModel(INotificationManager notificationManager, IUserDialogs dialogs)
         {
             this.WhenAnyValue
             (
@@ -31,26 +32,30 @@ namespace Samples.Notifications
             this.SelectedDate = DateTime.Now;
             this.SelectedTime = DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(10));
 
-            this.SendScheduled = ReactiveCommand.CreateFromTask(
-                () => notificationManager.Send(new Notification
+            this.Send = ReactiveCommand.CreateFromTask(
+                async () =>
                 {
-                    Title = "Scheduled",
-                    Message = "This is a test scheduled notification",
-                    Payload = "scheduled",
-                    ScheduleDate = this.ScheduledTime
-                }),
+                    await notificationManager.Send(new Notification
+                    {
+                        Title = this.NotificationTitle,
+                        Message = this.NotificationMessage,
+                        Payload = this.Payload,
+                        ScheduleDate = this.ScheduledTime
+                    });
+                    this.NotificationTitle = String.Empty;
+                    this.NotificationMessage = String.Empty;
+                    this.Payload = String.Empty;
+                    await dialogs.Alert("Notification Sent Successfully");
+                },
                 this.WhenAny(
+                    x => x.NotificationTitle,
+                    x => x.NotificationMessage,
                     x => x.ScheduledTime,
-                    x => x.GetValue() > DateTime.Now
+                    (title, msg, sch) =>
+                        !title.GetValue().IsEmpty() &&
+                        !msg.GetValue().IsEmpty() &&
+                        sch.GetValue() > DateTime.Now
                 )
-            );
-            this.SendImmediate = ReactiveCommand.CreateFromTask(
-                () => notificationManager.Send(new Notification
-                {
-                    Title = "Immediate",
-                    Message = "This is a immediate test notification",
-                    Payload = "immediate"
-                })
             );
             this.PermissionCheck = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -61,11 +66,13 @@ namespace Samples.Notifications
 
 
         public ICommand PermissionCheck { get; }
-        public ICommand SendImmediate { get; }
+        public ICommand Send { get; }
 
-        public ICommand SendScheduled { get; }
+        [Reactive] public string NotificationTitle { get; set;} = "Test Title";
+        [Reactive] public string NotificationMessage { get; set; } = "Test Message";
         public DateTime ScheduledTime { [ObservableAsProperty] get; }
         [Reactive] public DateTime SelectedDate { get; set; }
         [Reactive] public TimeSpan SelectedTime { get; set; }
+        [Reactive] public string Payload { get; set; }
     }
 }

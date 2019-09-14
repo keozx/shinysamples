@@ -41,7 +41,7 @@ namespace Samples.Beacons
                         Detail = $"{x.Uuid}/{x.Major ?? 0}/{x.Minor ?? 0}",
                         PrimaryCommand = ReactiveCommand.CreateFromTask(async () =>
                         {
-                            await this.beaconManager.StopMonitoring(x);
+                            await this.beaconManager.StopMonitoring(x.Identifier);
                             this.Load.Execute(null);
                         })
                     })

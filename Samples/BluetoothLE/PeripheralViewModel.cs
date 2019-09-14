@@ -17,11 +17,13 @@ namespace Samples.BluetoothLE
     public class PeripheralViewModel : ViewModel
     {
         readonly IUserDialogs dialogs;
+        readonly ICentralManager centralManager;
         IPeripheral peripheral;
 
 
         public PeripheralViewModel(ICentralManager centralManager, IUserDialogs dialogs)
         {
+            this.centralManager = centralManager;
             this.dialogs = dialogs;
 
             this.SelectCharacteristic = ReactiveCommand.Create<GattCharacteristicViewModel>(x => x.Select());
@@ -41,17 +43,15 @@ namespace Samples.BluetoothLE
 
             this.PairToDevice = ReactiveCommand.Create(() =>
             {
-                if (!centralManager.Features.HasFlag(BleFeatures.PairingRequests))
-                {
-                    dialogs.Toast("Pairing is not supported on this platform");
-                }
-                else if (this.peripheral.PairingStatus == PairingState.Paired)
+                var pair = this.centralManager as ICanPairPeripherals;
+
+                if (pair.PairingStatus == PairingState.Paired)
                 {
                     dialogs.Toast("Peripheral is already paired");
                 }
                 else
                 {
-                    this.peripheral
+                    pair
                         .PairingRequest()
                         .Subscribe(x =>
                         {
@@ -65,39 +65,13 @@ namespace Samples.BluetoothLE
             this.RequestMtu = ReactiveCommand.CreateFromTask(
                 async x =>
                 {
-                    if (!centralManager.Features.HasFlag(BleFeatures.MtuRequests))
+                    var mtu = this.centralManager as ICanRequestMtu;
+                    var result = await dialogs.Prompt("Range 20-512", "MTU Request");
+                    if (result.Ok)
                     {
-                        await dialogs.Alert("MTU Request not supported on this platform");
-                    }
-                    else
-                    {
-                        var result = await dialogs.Prompt("Range 20-512", "MTU Request");
-                            //.SetTitle("MTU Request")
-                            //.SetMessage("Range 20-512")
-                        //    .SetInputMode(InputType.Number)
-                        //    .SetOnTextChanged(args =>
-                        //    {
-                        //        var len = args.Value?.Length ?? 0;
-                        //        if (len > 0)
-                        //        {
-                        //            if (len > 3)
-                        //            {
-                        //                args.Value = args.Value.Substring(0, 3);
-                        //            }
-                        //            else
-                        //            {
-                        //                var value = Int32.Parse(args.Value);
-                        //                args.IsValid = value >= 20 && value <= 512;
-                        //            }
-                        //        }
-                        //    })
-                        //);
-                        if (result.Ok)
-                        {
 
-                            var actual = await this.peripheral.RequestMtu(Int32.Parse(result.Value));
-                            dialogs.Toast("MTU Changed to " + actual);
-                        }
+                        var actual = await mtu.RequestMtu(Int32.Parse(result.Value));
+                        dialogs.Toast("MTU Changed to " + actual);
                     }
                 },
                 this.WhenAny(
@@ -115,7 +89,7 @@ namespace Samples.BluetoothLE
             this.peripheral = parameters.GetValue<IPeripheral>("Peripheral");
             this.Name = this.peripheral.Name;
             this.Uuid = this.peripheral.Uuid;
-            this.PairingText = this.peripheral.PairingStatus == PairingState.Paired ? "Peripheral Paired" : "Pair Peripheral";
+            this.PairingText = this.peripheral.TryGetPairingStatus() == PairingState.Paired ? "Peripheral Paired" : "Pair Peripheral";
 
             this.peripheral
                 .WhenReadRssiContinuously(TimeSpan.FromSeconds(3))
@@ -188,5 +162,9 @@ namespace Samples.BluetoothLE
 
         [Reactive] public string ConnectText { get; private set; } = "Connect";
         [Reactive] public int Rssi { get; private set; }
+
+        // TODO
+        //public bool IsMtuVisible => this.peripheral?.IsMtuRequestsAvailable() ?? false;
+        //public bool IsPairingVisible => this.centralManager.IsPairingRequestsAvailable();
     }
 }

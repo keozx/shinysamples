@@ -17,6 +17,6 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<application android:label="Shiny">
-    <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="#{GoogleMapsApiKey}#" />
+		<!--<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="#{GoogleMapsApiKey}#" />-->
 	</application>
 </manifest>

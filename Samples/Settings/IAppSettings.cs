@@ -5,6 +5,10 @@ namespace Samples.Settings
 {
     public interface IAppSettings
     {
+        bool IsChecked { get; set; }
+        string YourText { get; set; }
+        DateTime? LastUpdated { get; set; }
+
         bool UseNotificationsBle { get; set; }
         bool UseNotificationsGeofenceEntry { get; set; }
         bool UseNotificationsGeofenceExit { get; set; }

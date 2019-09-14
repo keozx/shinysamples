@@ -18,8 +18,13 @@
                     </DataTrigger>
                 </Button.Triggers>
             </Button>
-            <Button Text="Open Settings" Command="{Binding OpenSettings}" />
-            <Button Text="Toggle Adapter" Command="{Binding ToggleAdapterState}" />
+            <Button Text="Open Settings"
+                    Command="{Binding OpenSettings}"
+                    IsVisible="{Binding CanOpenSettings}" />
+
+            <Button Text="Toggle Adapter"
+                    Command="{Binding ToggleAdapterState}"
+                    IsVisible="{Binding CanControlAdapterState}"/>
 
             <ListView ItemsSource="{Binding Peripherals}" RowHeight="160">
 			    <ListView.Behaviors>

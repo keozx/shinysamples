@@ -75,7 +75,7 @@ namespace Samples.Geofences
                         var confirm = await this.dialogs.Confirm("Are you sure you wish to remove geofence - " + region.Identifier);
                         if (confirm)
                         {
-                            await this.geofenceManager.StopMonitoring(region);
+                            await this.geofenceManager.StopMonitoring(region.Identifier);
                             await this.LoadRegions();
                         }
                     }),

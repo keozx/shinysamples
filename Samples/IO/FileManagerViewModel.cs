@@ -59,28 +59,33 @@ namespace Samples.IO
                 }
                 else
                 {
-                    cfg.Add("Copy", () =>
+                    cfg.Add("View", async () =>
                     {
-                        //var progress = dialogs.Progress(new ProgressDialogConfig
-                        //{
-                        //    Title = "Copying File"
-                        //});
-
-                        var fn = Path.GetFileNameWithoutExtension(entry.Entry.Name);
-                        var ext = Path.GetExtension(entry.Entry.Name);
-                        var newFn = ext.IsEmpty() ? $"fn_1" : $"{fn}_1.{ext}";
-                        var target = new FileInfo(newFn);
-                        var file = new FileInfo(entry.Entry.FullName);
-                        file
-                            .CopyProgress(target, true)
-                            .Subscribe(p =>
-                            {
-                                //progress.Title = "Copying File - Seconds Left: " + p.TimeRemaining.TotalSeconds;
-                                //progress.PercentComplete = p.PercentComplete;
-                            });
+                        var text = File.ReadAllText(entry.Entry.FullName);
+                        await this.dialogs.Alert(text, entry.Entry.Name);
                     });
+                    //cfg.Add("Copy", () =>
+                    //{
+                    //    //var progress = dialogs.Progress(new ProgressDialogConfig
+                    //    //{
+                    //    //    Title = "Copying File"
+                    //    //});
+
+                    //    var fn = Path.GetFileNameWithoutExtension(entry.Entry.Name);
+                    //    var ext = Path.GetExtension(entry.Entry.Name);
+                    //    var newFn = ext.IsEmpty() ? $"fn_1" : $"{fn}_1.{ext}";
+                    //    var target = new FileInfo(newFn);
+                    //    var file = new FileInfo(entry.Entry.FullName);
+                    //    file
+                    //        .CopyProgress(target, true)
+                    //        .Subscribe(p =>
+                    //        {
+                    //            //progress.Title = "Copying File - Seconds Left: " + p.TimeRemaining.TotalSeconds;
+                    //            //progress.PercentComplete = p.PercentComplete;
+                    //        });
+                    //});
                 }
-                cfg.Add("Delete", () => Confirm("Delete " + entry.Name, entry.Entry.Delete));
+                //cfg.Add("Delete", () => Confirm("Delete " + entry.Name, entry.Entry.Delete));
                 dialogs.ActionSheet(cfg);
             });
 

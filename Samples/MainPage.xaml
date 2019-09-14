@@ -15,22 +15,27 @@
                     <TableSection>
                         <TextCell Text="Welcome" Command="{Binding Navigate}" CommandParameter="Nav/Welcome" />
                     </TableSection>
-                    <TableSection>
+                    <TableSection Title="Bluetooth">
                         <TextCell Text="Beacons" Command="{Binding Navigate}" CommandParameter="Nav/Beacons" />
                         <TextCell Text="BluetoothLE Central" Command="{Binding Navigate}" CommandParameter="Nav/BleCentral" />
                         <TextCell Text="BluetoothLE Peripherals" Command="{Binding Navigate}" CommandParameter="Nav/BlePeripherals" />
+                    </TableSection>
+                    <TableSection Title="Locations">
                         <TextCell Text="GPS" Command="{Binding Navigate}" CommandParameter="Nav/Gps"  />
                         <TextCell Text="Geofencing" Command="{Binding Navigate}" CommandParameter="Nav/Geofencing" />
-                        <TextCell Text="HTTP Transfers" Command="{Binding Navigate}" CommandParameter="Nav/HttpTransfers" />
-                        <TextCell Text="Jobs" Command="{Binding Navigate}" CommandParameter="Nav/Jobs" />
-                        <TextCell Text="Notifications" Command="{Binding Navigate}" CommandParameter="Nav/Notifications" />
-                        <TextCell Text="Speech Recognition" Command="{Binding Navigate}" CommandParameter="Nav/SpeechRecognition"  />
+                        <TextCell Text="Motion Activity" Command="{Binding Navigate}" CommandParameter="Nav/MotionActivity"  />
                     </TableSection>
-                    <TableSection>
-                        <TextCell Text="All Sensors" Command="{Binding Navigate}" CommandParameter="Nav/Sensors" />
+                    <TableSection Title="Sensors">
+                        <TextCell Text="All" Command="{Binding Navigate}" CommandParameter="Nav/Sensors" />
                         <TextCell Text="Compass" Command="{Binding Navigate}" CommandParameter="Nav/Compass" />
                     </TableSection>
                     <TableSection>
+                        <TextCell Text="HTTP Transfers" Command="{Binding Navigate}" CommandParameter="Nav/HttpTransfers" />
+                        <TextCell Text="Notifications" Command="{Binding Navigate}" CommandParameter="Nav/Notifications" />
+                        <TextCell Text="Speech Recognition" Command="{Binding Navigate}" CommandParameter="Nav/SpeechRecognition"  />
+                    </TableSection>
+                    <TableSection Title="Core">
+                        <TextCell Text="Jobs" Command="{Binding Navigate}" CommandParameter="Nav/Jobs" />
                         <TextCell Text="IO" Command="{Binding Navigate}" CommandParameter="Nav/IO" />
                         <TextCell Text="Logging" Command="{Binding Navigate}" CommandParameter="Nav/Logs" />
                         <TextCell Text="Access" Command="{Binding Navigate}" CommandParameter="Nav/Access" />

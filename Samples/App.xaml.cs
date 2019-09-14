@@ -47,6 +47,8 @@ namespace Samples
             containerRegistry.RegisterForNavigation<Geofences.MainPage>("Geofencing");
             containerRegistry.RegisterForNavigation<Geofences.CreatePage>("CreateGeofence");
 
+            containerRegistry.RegisterForNavigation<MotionActivity.MainPage>("MotionActivity");
+
             containerRegistry.RegisterForNavigation<HttpTransfers.MainPage>("HttpTransfers");
             containerRegistry.RegisterForNavigation<HttpTransfers.CreatePage>("CreateTransfer");
             containerRegistry.RegisterForNavigation<HttpTransfers.ManageUploadsPage>("ManageUploads");

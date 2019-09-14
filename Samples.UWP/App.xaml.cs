@@ -31,6 +31,7 @@ namespace Samples.UWP
                 rootFrame = new Frame();
                 rootFrame.NavigationFailed += this.OnNavigationFailed;
                 Rg.Plugins.Popup.Popup.Init();
+                Xamarin.Forms.Forms.SetFlags("CollectionView_Experimental");
                 Forms.Init(e);
 
                 Window.Current.Content = rootFrame;

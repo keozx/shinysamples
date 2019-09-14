@@ -1,12 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Samples.Notifications.SetupPage"
-             Title="Setup">
+             x:Class="Samples.Notifications.CreatePage"
+             Title="Create">
     <ContentPage.Content>
         <StackLayout>
+
             <Button Text="Request Permissions (iOS Only)"
                     Command="{Binding PermissionCheck}" />
+
+            <Label Text="Title" />
+            <Entry Text="{Binding NotificationTitle}" />
+
+            <Label Text="Message" />
+            <Entry Text="{Binding NotificationMessage}" />
+
+            <Label Text="Payload" />
+            <Entry Text="{Binding Payload}" />
 
             <Label Text="Date" />
             <DatePicker Date="{Binding SelectedDate}" />
@@ -14,11 +24,7 @@
             <Label Text="Time" />
             <TimePicker Time="{Binding SelectedTime}" />
 
-            <Button Text="Send Scheduled Notification"
-                    Command="{Binding SendScheduled}" />
-
-            <Button Text="Send Immediate Notification"
-                    Command="{Binding SendImmediate}" />
+            <Button Text="Send" Command="{Binding Send}" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

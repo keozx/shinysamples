@@ -1,6 +1,7 @@
 ﻿using System;
 using Shiny;
 using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
@@ -27,18 +28,22 @@ namespace Samples.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+
+            Forms.SetFlags("CollectionView_Experimental");
             Forms.Init(this, savedInstanceState);
             FormsMaps.Init(this, savedInstanceState);
             Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
             this.LoadApplication(new App());
+
+            Shiny.Notifications.NotificationManager.TryProcessIntent(this.Intent);
         }
 
 
-        //protected override void OnNewIntent(Android.Content.Intent intent)
-        //{
-        //    base.OnNewIntent(intent);
-        //    Push.CheckLaunchedFromNotification(this, intent);
-        //}
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+            Shiny.Notifications.NotificationManager.TryProcessIntent(intent);
+        }
 
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)

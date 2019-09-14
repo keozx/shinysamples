@@ -16,6 +16,7 @@ namespace Samples.BluetoothLE
 {
     public class AdapterViewModel : ViewModel
     {
+        readonly ICentralManager centralManager;
         IDisposable scan;
 
 
@@ -23,6 +24,8 @@ namespace Samples.BluetoothLE
                                 INavigationService navigator,
                                 IUserDialogs dialogs)
         {
+            this.centralManager = central;
+
             this.SelectPeripheral = navigator.NavigateCommand<PeripheralItemViewModel>(
                 "Peripheral",
                 (x, p) => p.Add("Peripheral", x.Peripheral)
@@ -30,28 +33,16 @@ namespace Samples.BluetoothLE
 
             this.OpenSettings = ReactiveCommand.Create(() =>
             {
-                if (central.Features.HasFlag(BleFeatures.OpenSettings))
-                {
-                    central.OpenSettings();
-                }
-                else
-                {
-                    dialogs.Alert("Cannot open bluetooth settings");
-                }
+                var settings = this.centralManager as ICanOpenAdapterSettings;
+                settings.OpenSettings();
             });
 
             this.ToggleAdapterState = ReactiveCommand.Create(
                 () =>
                 {
-                    if (central.CanControlAdapterState())
-                    {
-                        var poweredOn = central.Status == AccessState.Available;
-                        central.SetAdapterState(!poweredOn);
-                    }
-                    else
-                    {
+                    var poweredOn = central.Status == AccessState.Available;
+                    if (!central.TrySetAdapterState(!poweredOn))
                         dialogs.Alert("Cannot change bluetooth adapter state");
-                    }
                 }
             );
 

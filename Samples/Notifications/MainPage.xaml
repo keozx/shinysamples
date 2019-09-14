@@ -4,8 +4,9 @@
             x:Class="Samples.Notifications.MainPage"
              Title="Notifications">
     <TabbedPage.Children>
-        <notifications:SetupPage Title="Setup" />
+        <notifications:CreatePage Title="Create" />
         <notifications:PendingPage Title="Pending" />
         <notifications:SettingsPage Title="App Settings" />
+        <notifications:LogPage Title="Logs" />
     </TabbedPage.Children>
 </TabbedPage>

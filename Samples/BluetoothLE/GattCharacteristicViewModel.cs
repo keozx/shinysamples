@@ -8,7 +8,7 @@ using ReactiveUI.Fody.Helpers;
 using Acr.UserDialogs.Forms;
 using Shiny;
 using Shiny.BluetoothLE.Central;
-
+using System.IO;
 
 namespace Samples.BluetoothLE
 {
@@ -68,13 +68,6 @@ namespace Samples.BluetoothLE
 
         async void SendBlob()
         {
-            var useReliableWrite = await this.dialogs.Confirm(new ConfirmConfig
-                {
-                    Title = "Confirm",
-                    Message = "Use reliable write transaction?"
-                }
-                .UseYesNo()
-            );
             var cts = new CancellationTokenSource();
             var bytes = Encoding.UTF8.GetBytes(RandomString(5000));
             //var dlg = this.dialogs.Loading("Sending Blob", () => cts.Cancel(), "Cancel");
@@ -82,7 +75,7 @@ namespace Samples.BluetoothLE
             sw.Start();
 
             var sub = this.Characteristic
-                .BlobWrite(bytes, useReliableWrite)
+                .BlobWrite(new MemoryStream(bytes))
                 .Subscribe(
                     //s => dlg.Title = $"Sending Blob - Sent {s.Position} of {s.TotalLength} bytes",
                     ex =>
@@ -95,9 +88,7 @@ namespace Samples.BluetoothLE
                     {
                         //dlg.Dispose();
                         sw.Stop();
-
-                        var pre = useReliableWrite ? "reliable write" : "write";
-                        this.dialogs.Toast($"BLOB {pre} took " + sw.Elapsed);
+                        this.dialogs.Toast($"BLOB write took " + sw.Elapsed);
                     }
                 );
 

@@ -2,11 +2,12 @@
 using System.Reactive.Linq;
 using System.Text;
 using System.Windows.Input;
-using Shiny.BluetoothLE.Peripherals;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Acr.UserDialogs.Forms;
 using Shiny;
+using Shiny.BluetoothLE.Peripherals;
+
 
 namespace Samples.BlePeripherals
 {

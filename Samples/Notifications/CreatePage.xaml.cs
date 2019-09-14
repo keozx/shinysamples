@@ -4,9 +4,9 @@ using Xamarin.Forms;
 
 namespace Samples.Notifications
 {
-    public partial class SetupPage : ContentPage
+    public partial class CreatePage : ContentPage
     {
-        public SetupPage()
+        public CreatePage()
         {
             this.InitializeComponent();
         }

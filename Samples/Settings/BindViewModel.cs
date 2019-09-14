@@ -4,7 +4,7 @@ using Shiny.Settings;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Prism.Navigation;
-using System.Threading.Tasks;
+
 
 namespace Samples.Settings
 {
@@ -30,16 +30,16 @@ namespace Samples.Settings
         [Reactive] public DateTime? LastUpdated { get; set; }
 
 
-        public override void Initialize(INavigationParameters parameters)
+        public override void OnAppearing()
         {
-            base.Initialize(parameters);
-            this.settings.Bind(this, "AppSettings");
+            base.OnAppearing();
+            this.settings.Bind(this);
         }
 
 
-        public override void Destroy()
+        public override void OnDisappearing()
         {
-            base.Destroy();
+            base.OnDisappearing();
             this.settings.UnBind(this);
         }
     }

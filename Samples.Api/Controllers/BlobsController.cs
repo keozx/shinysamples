@@ -31,7 +31,7 @@ namespace Samples.Api.Controllers
 
         [Authorize]
         [HttpGet("downloadwithauth/{name}")]
-        public async Task<IActionResult> DownloadWithAuth(string name)
+        public IActionResult DownloadWithAuth(string name)
             => this.ResumingFile(F.OpenRead(name), "application/octet-stream");
 
 
